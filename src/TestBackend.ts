@@ -65,25 +65,43 @@ function getClockAngle(hh_mm:string):number {
 
 function getQuestionPart(phrases:string[]):string[] {
     let [word1, word2, word3] = phrases;
-    let commonWord:string[] = [];
-
+    let commonWordPerRound:string[] = ['']
+    
     for(let i=0; i<word1.length; i++){
-        if(word2.includes(word1[i]) && word3.includes(word1[i])){
-            commonWord.push(word1[i]);
+        for(let j=i; j<word1.length; j++){
+            let testWord = word1.substring(i, j+1)
+
+            if(word2.includes(testWord) && word3.includes(testWord)){
+                commonWordPerRound[i] = testWord;
+            }else{
+                break;
+            }
         }
     }
+
+    let commonWord:string = '';
+    let lengthWord:number = -1;
+
+    for(let word of commonWordPerRound){
+        if(word.length > lengthWord){
+            commonWord = word;
+            lengthWord = word.length;;
+        }
+    }
+
+    let resultWords = phrases.map(word => word.replace(commonWord, ''));
     
-    return [];
+    return resultWords;
 }
 // test Q1
-// console.log(getHandScore("S8 S10 CA"));
-// console.log(getHandScore("D6 D2 H9"));
-// console.log(getHandScore("S8 D8 C8"));
+console.log(getHandScore("S8 S10 CA"));
+console.log(getHandScore("H3 DJ H6"));
+console.log(getHandScore("S8 D8 C8"));
 
-// // test Q2
-// console.log(getClockAngle("09:00"));
-// console.log(getClockAngle("17:30"));
-// console.log(getClockAngle("03:48"));
+// test Q2
+console.log(getClockAngle("09:00"));
+console.log(getClockAngle("17:30"));
+console.log(getClockAngle("02:42"));
 
 // test Q3
 console.log(getQuestionPart(['BATHROOM', 'BATH SALTS', 'BLOODBATH']));
