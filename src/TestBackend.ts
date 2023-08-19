@@ -73,6 +73,7 @@ function getQuestionPart(phrases:string[]):string[] {
     // check common word by starting with each character 
     for(let i=0; i<word1.length; i++){
         // and adding one character per round
+        commonWordPerRound[i] = '';
         for(let j=i; j<word1.length; j++){
             let testWord = word1.substring(i, j+1)
 
@@ -87,16 +88,19 @@ function getQuestionPart(phrases:string[]):string[] {
 
     let commonWord:string = '';
     let lengthWord:number = -1;
+
     
     // check each word in CommonWordPerRound which word is the longest then is commonword
     for(let word of commonWordPerRound){
-        if(word.length > lengthWord){
-            commonWord = word;
-            lengthWord = word.length;;
+        if(word != ''){
+            if(word.length > lengthWord){             
+                commonWord = word;
+                lengthWord = word.length;
+            }
         }
     }
-    // remove commonWord and blank in each word of phrases
-    return phrases.map(word => word.replace(commonWord, '').replace(' ', ''));
+    // remove commonWord and remove blank nearby each commonWord
+    return phrases.map(word => word.replace(commonWord + ' ', '').replace(' ' + commonWord, '').replace(commonWord, ''));
 }
 
 
